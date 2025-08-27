@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { LIST_ALL_RESTAURANTS } from "../utils/constants.js";
 import RestaurantCard from "./Restaurant";
 import Shimmer from "./Shimmer";
+import { withPromotedLabel } from "./Restaurant";
 
 
 const Body = () => {
     const [resList, setResList] = useState([]);
     const [searchText, setSearchText] = useState("");
     const [filteredResList, setFilteredResList] = useState([]);
+
+    const RestauantCardPromoted = withPromotedLabel(RestaurantCard)
 
 
     useEffect(() => {
@@ -23,8 +26,7 @@ const Body = () => {
 
         const data = await fetch("http://localhost:8080/restaurants")
         const res = await data.json();
-        const restaurantList = res.data;
-        console.log("data is fetched " + JSON.stringify(restaurantList, null, 2))
+        console.log("data is fetched " + JSON.stringify(res, null, 2))
         setResList(res)
         setFilteredResList(res)
     }
@@ -77,8 +79,11 @@ const Body = () => {
 
                 <div className="flex flex-wrap">
                     {
-                        filteredResList.map((restaurant, index) => <RestaurantCard key={restaurant.id} res={restaurant} />
-                        )}
+                        filteredResList.map((restaurant, index) => {
+                           return restaurant.promoted ?
+                                <RestauantCardPromoted key={restaurant.id} res={restaurant} /> :
+                                <RestaurantCard key={restaurant.id} res={restaurant} />
+})}
                 </div>
             </div>
     )
