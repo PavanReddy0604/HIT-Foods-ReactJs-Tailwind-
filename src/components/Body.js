@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LIST_ALL_RESTAURANTS } from "../utils/constants.js";
 import RestaurantCard from "./Restaurant";
 import Shimmer from "./Shimmer";
 import { withPromotedLabel } from "./Restaurant";
+import UserContext from "../utils/userContext.js";
 
 
 const Body = () => {
     const [resList, setResList] = useState([]);
     const [searchText, setSearchText] = useState("");
     const [filteredResList, setFilteredResList] = useState([]);
+    const {loggedInUser,setUserName}=useContext(UserContext);
 
     const RestauantCardPromoted = withPromotedLabel(RestaurantCard)
 
@@ -75,15 +77,30 @@ const Body = () => {
                         }}>show all</button>
 
                     </div>
+                    <div className="search m-4 p-4">
+                              <button className="px-4 py-2 m-4 bg-green-100 rounded-lg hover:cursor-pointer" onClick={() => {
+                            console.log(`search text is ${searchText}`)
+                        }}>UserName: </button>
+
+                        <input type="text"
+                            className=" border border-solid border-black rounded-lg p-2 focus:ring"
+                            value={loggedInUser}
+                            onChange={(e) => {
+                                setUserName(e.target.value)
+                            }}
+                        >
+                        </input>
+                  
+                    </div>
                 </div>
 
                 <div className="flex flex-wrap">
                     {
                         filteredResList.map((restaurant, index) => {
-                           return restaurant.promoted ?
+                            return restaurant.promoted ?
                                 <RestauantCardPromoted key={restaurant.id} res={restaurant} /> :
                                 <RestaurantCard key={restaurant.id} res={restaurant} />
-})}
+                        })}
                 </div>
             </div>
     )
