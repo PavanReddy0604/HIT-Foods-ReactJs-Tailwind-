@@ -3,11 +3,13 @@ import { HEADER_LOGO } from "../utils/constants"
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/userOnlineStatus";
 import UserContext from "../utils/userContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
     const [status, setStatus] = useState('Logout')
     const onlineStatus = useOnlineStatus();
     const {loggedInUser}=useContext(UserContext)
+    const cartItems=useSelector((store)=>store.cartReducer.cartItems)
     return (
         <div className="flex justify-between shadow-2xl bg-pink-100">
             <div >
@@ -38,7 +40,8 @@ const Header = () => {
                         Grocery
                     </Link> </li>
 
-                    <li className="p-5 font-bold  hover:bg-gray-200" > Cart </li>
+                    <li className="p-5 font-bold  hover:bg-gray-200" >
+                        <Link to ='/cart'> Cart- {cartItems.length}  </Link></li>
 
                     <button className='font-bold p-5' onClick={() => {
                         console.log(`State is ${status}`)
